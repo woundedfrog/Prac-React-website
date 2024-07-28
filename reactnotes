@@ -1,0 +1,26 @@
+react notes:
+
+
+          <Route path='/playlist' element={<XS/>} /> 
+the /playlist refers to the file name in the pages folder
+the element= refers to the variable in the import VARNAME from.  the from is the direct location of the js file
+
+  <li className='nav-item'>
+              <Link
+                to='/2'
+                className='nav-links'
+                onClick={closeMobileMenu}
+              >
+                YouTubePl
+              </Link>
+
+the "to=" in the navbar links needs to be the same address as Route "path=/2" in the App.js
+
+
+
+
+
+UCBd-6nC4gTyzIR6CThIRg6Q channelID
+
+s
+ 

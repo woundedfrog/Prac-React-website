@@ -5,14 +5,12 @@ import Cards from '../Cards';
 
 import '../../App.css';
 
-function Home() {
+export default function Home() {
   return (
     <>
       <HeroSection />
       <Cards />
-      // <Footer />
+      <Footer />
     </>
   );
 }
-
-export default Home;
