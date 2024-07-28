@@ -18,7 +18,33 @@ the "to=" in the navbar links needs to be the same address as Route "path=/2" in
 
 
 
+--------------------------
+export default function Playlist() {
+  
+const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=25&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk&key=AIzaSyBOg2M8iFPKIJ9_G9hcxUV56yFFa9icglk'
 
+{<vid></vid>}
+
+  fetch(apiUrl)
+.then(res => {
+ return res.json();
+ })
+ .then(data=>{
+  data.items.forEach((curr=>{
+    var vidTitle = curr.snippet.title;
+    var vidUrl = 'https://www.youtube.com/watch?v=' + curr.snippet.resourceId.videoId;
+console.log(curr.snippet);
+         
+        var markup = `<a href='${vidUrl}' target='_blank'>'${vidTitle}'</a>`;
+      
+}))
+ })
+
+}
+#above in the a link markup, it's tilde key next to 1 that surrounds the HTML element. , not single quote mark. WHY?
+
+
+-------------------------
 
 UCBd-6nC4gTyzIR6CThIRg6Q channelID
 
