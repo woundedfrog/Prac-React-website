@@ -34,8 +34,6 @@ var count = 0;
         var markup = `<div class='videoitem'><a class='vidlink' href='${vidUrl}' target='_blank'><img class='vidimg' src='${vidThumbnail}'></img></a><p>${vidTitle}</p></div>`;
 if (array.indexOf(markup) === -1) {
             
-console.log(array);
-
 array.push(markup);
 
 }
@@ -45,16 +43,20 @@ array.push(markup);
     // console.log(array.indexOf(markup) , array);  
 
 }))
+
+nextpage = data.nextPageToken;
+
   
 array.forEach((items) => {
-  console.log(array.indexOf(items) >! 1);
+  // console.log(array.indexOf(items) >! 1);
   if (array.indexOf(items) >= 1) {
     document.querySelector('vid').insertAdjacentHTML('beforeend',items);
   };
 }
  
  )
-  })
+  }) //end of then(data)
+
 
 
  return ( 
