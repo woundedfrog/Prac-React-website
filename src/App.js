@@ -5,7 +5,7 @@ import Home from './components/pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Services from './components/pages/Services';
 import Products from './components/pages/Products';
-import Playlist from './components/pages/Playlist';
+import Linker from './components/pages/Playlist';
 import SignUp from './components/pages/SignUp';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
           <Route path='/' exact element={ <Home />}/>
           <Route path='/services' element={<Services/>} />
           <Route path='/products' element={<Products/>} />
-          <Route path='/playlist' element={<Playlist/>} />
+          <Route path='/playlist' element={<Linker/>} />
           <Route path='/sign-up' element={<SignUp/>} />
         </Routes>
       </Router>
