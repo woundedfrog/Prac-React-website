@@ -6,10 +6,11 @@ import '../playlist.css';
 
 const apiUrl2 = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk&key=AIzaSyBOg2M8iFPKIJ9_G9hcxUV56yFFa9icglk'
 
-const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&pageToken='
-const apiUrlEnd = '&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk&publishedAfter=2019-09-28T00:00:00Z&key=AIzaSyBOg2M8iFPKIJ9_G9hcxUV56yFFa9icglk'
-var nextpage = 'EAAajQFQVDpDRElpRUVSRVJVVkdORVEyTkRjNU1FVTVOVGNvQVVpejZ0LUMxcjJIQTFBQldrUWlRMmxLVVZSSFkzUlZWbVJ1VlZScmQwNHdhSFpsYWxsNFlqQldWR1ZYZUZWaFIwbDVWRlZ6TldSc1FrUk9ia3B5UldkelNURmplbDkwUVZsUmRWQnlVMHhSSWc'
-var url = fetch(apiUrl + apiUrlEnd);
+const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
+const apiUrlEnd = '&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk&key=AIzaSyBOg2M8iFPKIJ9_G9hcxUV56yFFa9icglk'
+
+  var nextpage = ''
+  var url = apiUrl + nextpage + apiUrlEnd;
 
 const array = [];
 const numOfVideos = 0; 
@@ -18,19 +19,24 @@ var count = numOfVideos / 50;
 var count = 0;
 
 
-console.log(apiUrl + apiUrlEnd);
-function Playlist() {
+// console.log('old____' + nextpage);
+
+function format(nn) {
+
 
  
- fetch(apiUrl + apiUrlEnd)
+ fetch(nn)
  .then(res => {
   console.log(res.json);
  return res.json();
  })
  .then(data=>{
 
-  // console.log(data.pageInfo.totalResults);
-
+console.log(url);
+nextpage = '&pageToken=' + data.nextPageToken;
+url = apiUrl + nextpage + apiUrlEnd;
+count = count + 1;
+console.log(url);
   data.items.forEach((curr=>{
     var vidTitle = curr.snippet.title;
     var vidUrl = 'https://www.youtube.com/watch?v=' + curr.snippet.resourceId.videoId;
@@ -54,7 +60,7 @@ array.push(markup);
 
  
 
-nextpage = data.nextPageToken;
+
 
 
 
@@ -63,11 +69,22 @@ nextpage = data.nextPageToken;
 
 
 
- return (
-    <div>
-<vid></vid>
-    </div>
-    );
+};
+
+
+function Playlist(url) {
+
+var x = [1,2,3]
+// console.log(apiUrl2);
+//         console.log(url);
+x.forEach((curr)=>{
+
+ url = apiUrl + nextpage + apiUrlEnd;
+ // why is the url not being updated and passed through to the call???
+ // count = count + 1;
+ console.log(count);
+ format(url);
+    });
 }
 export default Playlist;
 
@@ -79,3 +96,21 @@ export default Playlist;
 //     </div>
 //     );
 // }
+
+
+
+
+// maybe this code can work too:
+
+
+// const Stars = ({n}) => {
+//   let stars = []
+//   for (let i = 0; i < n; ++i) {
+//     stars.push(<i className="fa fa-star" key={i}></i>)
+//   }
+
+//   return (
+//     <div className="Stars">
+//       {stars}
+//     </div>
+//   )

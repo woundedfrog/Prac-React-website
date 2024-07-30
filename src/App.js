@@ -21,6 +21,7 @@ function App() {
           <Route path='/sign-up' element={<SignUp/>} />
         </Routes>
       </Router>
+      <vid></vid>
     </>
   );
 }
