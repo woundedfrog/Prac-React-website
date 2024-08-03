@@ -7,11 +7,12 @@ import Services from './components/pages/Services';
 import Products from './components/pages/Products';
 import Linker from './components/pages/Playlist';
 import SignUp from './components/pages/SignUp';
+import {MouseEvent} from 'react';
 
 function App() {
-  return (
-    <>
-      <Router>
+    return ( <
+        >
+        <Router>
         <Navbar />
         <Routes>
           <Route path='/' exact element={ <Home />}/>
@@ -20,10 +21,10 @@ function App() {
           <Route path='/playlist' element={<Linker/>} />
           <Route path='/sign-up' element={<SignUp/>} />
         </Routes>
-      </Router>
-      <vid></vid>
-    </>
-  );
+      </Router> 
+      <vid > < /vid> 
+        </>
+    );
 }
 
 export default App;
