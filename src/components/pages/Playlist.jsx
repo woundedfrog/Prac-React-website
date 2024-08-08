@@ -10,26 +10,27 @@ import {
 import xtype from 'xtypejs';
 
 const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50';
-// var playlistId = ''; //'&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk';
+// let playlistId = ''; //'&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk';
 const apiUrlEnd = '&key=AIzaSyBOg2M8iFPKIJ9_G9hcxUV56yFFa9icglk';
 
-let array = [];
-var count = 0;
-// const [vidCount, setCount] = useState(0);
-function Format() { // console.log("next___  " + nextPage);
-    // console.log("prev___ " + prevPage);
+const array = [];
+let count = 0;
+
+function Format() { 
+    
     const [vidCount, setCount] = useState(0);
+    const [totalvids, setTotalVids] = useState(0);
     const [newUrl, setNewUrl] = useState('');
     const inputRef = useRef('');
     const searchVal = useRef('');
     const [playlistId, setPlaylistId] = useState(inputRef.current.value);
     const [nextPage, setNextPage] = useState('');
-    const [prevPage, setPrevPage] = useState('');
+    // const [prevPage, setPrevPage] = useState('');
 
     const submitHandler = (e) => {
         e.preventDefault();
 
-        setPlaylistId(inputRef.current.value.length == 0 ? '&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk' : '&playlistId=' + inputRef.current.value);
+        setPlaylistId(inputRef.current.value.length === 0 ? '&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk' : '&playlistId=' + inputRef.current.value);
     }
 
     useEffect(() => {
@@ -37,20 +38,20 @@ function Format() { // console.log("next___  " + nextPage);
     }, [playlistId, nextPage]);
 
     const getVideosPage = (nn) => {
-        console.log();
-        let response;
-        if (nn == 'DeadEnd') {
+        let response = null;
+        if (nn === 'DeadEnd') {
             return
         };
         fetch(nn).then(res => {
             return (!res.ok) ? alert('No valid Url') : response = res.json();
 
         }).then(data => {
-            if (typeof data == "undefined") {
+            if (typeof data === "undefined") {
                 return;
             }
-            setNextPage(typeof data.nextPageToken != "undefined" ? '&pageToken=' + data.nextPageToken : 'NoNewUrl');
-            // setPrevPage(typeof data.prevPageToken != "undefined" ? '&pageToken=' + data.prevPageToken : false);
+            console.log(data);
+            setTotalVids(data.pageInfo.totalResults);
+            setNextPage(typeof data.nextPageToken !== "undefined" ? '&pageToken=' + data.nextPageToken : 'NoNewUrl');
 
             data.items.forEach((curr => {
                 const info = {
@@ -60,53 +61,48 @@ function Format() { // console.log("next___  " + nextPage);
                     date: curr.snippet.publishedAt,
 
                 };
-                var markup = `<p className='vidcounter'>${count + 1}</p><div key=${count} class='videoitem'><a class='vidlink' href='${info.vidUrl}' target='_blank'><img class='vidimg' src='${info.vidThumbnail}'></img></a><p>${info.vidTitle}</p></div>`;
                 array.push(info);
-                // document.querySelector('vid').insertAdjacentHTML('beforeend', markup);
-
                 setCount(array.length);
-                // return info;
             }))
         }); //end of then(data)
     };
-    // console.log(array);
 
 
     const pushIt = array.map((vid, idx) =>
         <li title={vid.vidTitle} className='vidlist' ><p className='vidcounter'>{idx}</p><
             div key={idx} className='videoitem'>
             <a className='vidlink' href={vid.vidUrl} target='_blank'>
-                <img className='vidimg' src={vid.vidThumbnail}></img>
+                <img className='vidimg' src={vid.vidThumbnail} alt='Coffee and Prayer video'></img>
             </a>
             <p>{vid.vidTitle}</p>
         </div></li>
     );
-    
-    const [displayState, setDisplayState] = useState('visible');
   
     const handleOnInputChange = (event) => {
+
+        if (newUrl === 'DeadEnd') {
+            return
+        };
+
         console.log(searchVal.current.value);
-        const query = !(searchVal.current.value.length == 0) ? searchVal.current.value : 'empty';
+
+        const query = !(searchVal.current.value.length === 0) ? searchVal.current.value : 'empty';
         console.log(query);
-        // let vidTags = React.Children.toArray(elements.children).filter((item) => item.props.className.includes(query));
-        var elements = document.getElementsByTagName('li');
-        var eleArray = Array.prototype.slice.call(elements);
-        // elements.style.display = "none";
-        // console.log(eleArray);
+
+        let elements = document.getElementsByTagName('li');
+        let eleArray = Array.prototype.slice.call(elements);
+
         eleArray.filter((item) => {
             console.log(!item.title.includes(query));
             if (!item.title) return item;
-            if (item.getAttribute('title').toLowerCase().includes(query.toLowerCase()) == false) {
-                // console.log( !item.getAttribute('title').toLowerCase().includes(query.toLowerCase()) === true );
+            if (item.getAttribute('title').toLowerCase().includes(query.toLowerCase()) === false && query !== 'empty') {
                 item.style.display = "none";
-            
-                console.log('i');
             } else {
                 item.style.display = "initial";
             }
+            return item;
             
         });
-        // console.log(vidTags);
         console.log(searchVal.current.value);
 
         
@@ -121,7 +117,7 @@ return (
         inputRef
     }/>
     <button type="submit" > Submit </button > </form>
-    <p>Submit Value: <b>{newUrl}</b></p>
+    <p>Submit Value: <b>{playlistId}</b></p>
         <br/>
         </div>
         
@@ -131,8 +127,9 @@ return (
    id="search-input"
    placeholder="Search..."/>
     <button type="submit"onClick={handleOnInputChange} > Submit </button >
-        <h2 onClick={() => getVideosPage(newUrl)}>click</h2>
-        <p key="totalVids">Number of videos loaded: {vidCount}</p>
+    <br/><br/>
+        <button onClick={() => getVideosPage(newUrl)} >Fetch Videos</button>
+        <p key="totalVids">Number of videos loaded: {vidCount} of {totalvids}</p>
         <ul className='videolist'>{pushIt}</ul>
      </>
      )
