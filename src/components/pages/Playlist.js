@@ -1,7 +1,6 @@
 import React from 'react';
 import '../../App.css';
 import '../playlist.css';
-import axios from 'axios';
 import {
     useRef,
     useState,
@@ -14,12 +13,11 @@ const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=sni
 const apiUrlEnd = '&key=AIzaSyBOg2M8iFPKIJ9_G9hcxUV56yFFa9icglk';
 
 const array = [];
-let count = 0;
 
-function Format() { 
-    
+function Format() {
+
     const [vidCount, setCount] = useState(0);
-    const [totalvids, setTotalVids] = useState(0);
+    const [totalVids, setTotalVids] = useState(0);
     const [newUrl, setNewUrl] = useState('');
     const inputRef = useRef('');
     const searchVal = useRef('');
@@ -38,18 +36,18 @@ function Format() {
     }, [playlistId, nextPage]);
 
     const getVideosPage = (nn) => {
-        let response = null;
+
         if (nn === 'DeadEnd') {
             return
         };
         fetch(nn).then(res => {
-            return (!res.ok) ? alert('No valid Url') : response = res.json();
+            return (!res.ok) ? alert('No valid Url') : res.json();
 
         }).then(data => {
             if (typeof data === "undefined") {
                 return;
             }
-            console.log(data);
+            // console.log(data);
             setTotalVids(data.pageInfo.totalResults);
             setNextPage(typeof data.nextPageToken !== "undefined" ? '&pageToken=' + data.nextPageToken : 'NoNewUrl');
 
@@ -69,31 +67,31 @@ function Format() {
 
 
     const pushIt = array.map((vid, idx) =>
-        <li title={vid.vidTitle} className='vidlist' ><p className='vidcounter'>{idx}</p><
-            div key={idx} className='videoitem'>
+        <li key={idx} title={vid.vidTitle.replace('Coffee & Prayer Bible Study ', '')} className='vidlist' ><p className='vidcounter'>{idx}</p>
+        <div className='videoitem'>
             <a className='vidlink' href={vid.vidUrl} target='_blank'>
                 <img className='vidimg' src={vid.vidThumbnail} alt='Coffee and Prayer video'></img>
             </a>
-            <p>{vid.vidTitle}</p>
+            <p>{vid.vidTitle.replace('Coffee & Prayer Bible Study ', '')}</p>
         </div></li>
     );
-  
+
     const handleOnInputChange = (event) => {
 
         if (newUrl === 'DeadEnd') {
             return
         };
 
-        console.log(searchVal.current.value);
+        // console.log(searchVal.current.value);
 
         const query = !(searchVal.current.value.length === 0) ? searchVal.current.value : 'empty';
-        console.log(query);
+        // console.log(query);
 
         let elements = document.getElementsByTagName('li');
         let eleArray = Array.prototype.slice.call(elements);
 
         eleArray.filter((item) => {
-            console.log(!item.title.includes(query));
+            // console.log(!item.title.includes(query));
             if (!item.title) return item;
             if (item.getAttribute('title').toLowerCase().includes(query.toLowerCase()) === false && query !== 'empty') {
                 item.style.display = "none";
@@ -101,39 +99,38 @@ function Format() {
                 item.style.display = "initial";
             }
             return item;
-            
+
         });
-        console.log(searchVal.current.value);
-
-        
-        };    
+        // console.log(searchVal.current.value);
 
 
-return ( 
-    <>
-     <div className="App">
-        <form onSubmit={submitHandler}>
-        <input ref={
-        inputRef
-    }/>
-    <button type="submit" > Submit </button > </form>
-    <p>Submit Value: <b>{playlistId}</b></p>
-        <br/>
-        </div>
-        
-        <input
-   type="text"
-   ref={searchVal}
-   id="search-input"
-   placeholder="Search..."/>
-    <button type="submit"onClick={handleOnInputChange} > Submit </button >
-    <br/><br/>
-        <button onClick={() => getVideosPage(newUrl)} >Fetch Videos</button>
-        <p key="totalVids">Number of videos loaded: {vidCount} of {totalvids}</p>
-        <ul className='videolist'>{pushIt}</ul>
-     </>
-     )
+    };
+
+    return (
+        <>
+            <div className="app">
+                <form onSubmit={submitHandler}>
+                    <input ref={inputRef} />
+                    <button className='btn-primary' type="submit" > Submit </button > </form>
+                <p>Submit Value: <b>{playlistId}</b></p>
+                <br />
+         
+
+            <input
+                type="text"
+                ref={searchVal}
+                id="search-input"
+                placeholder="Search..." />
+            <button className='btn-primary' type="submit" onClick={handleOnInputChange} > Submit </button >
+            <br />
+            <br />
+            <button className='btn-primary btn-secondary' onClick={() => getVideosPage(newUrl)}>Fetch Videos</button>
+            <p key="totalVids">Number of videos loaded: {vidCount} of {totalVids}</p>
+            <ul className='videolist'>{pushIt}</ul>
+            </div>
+        </>
+    )
 
 };
 
-                    export default Format;
+export default Format;

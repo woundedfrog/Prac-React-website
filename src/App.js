@@ -3,26 +3,51 @@ import Navbar from './components/Navbar';
 import './App.css';
 import Home from './components/pages/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Services from './components/pages/Services';
 import Products from './components/pages/Products';
-import Linker from './components/pages/Playlist';
-import SignUp from './components/pages/SignUp';
-import {MouseEvent} from 'react';
+import Ytplaylist from './components/pages/Playlist';
+import {MouseEvent} from 'react';import {
+  useState,
+  useEffect
+} from "react";
 
 function App() {
+
+  const [showButton,setShowButton] = useState(false);
+  const handleScrollToTop = () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  };
+
+  useEffect(() => {
+    const handleScrollButtonVisibility = () => {
+      window.scrollY > 300 ? setShowButton(true) : setShowButton(false);
+
+    };
+    window.addEventListener('scroll', handleScrollButtonVisibility);
+    return () => {
+      window.removeEventListener('scroll', handleScrollButtonVisibility);
+    };
+  }, []);
+
+
     return ( <
         >
         <Router>
         <Navbar />
         <Routes>
           <Route path='/' exact element={ <Home />}/>
-          <Route path='/services' element={<Services/>} />
           <Route path='/products' element={<Products/>} />
-          <Route path='/playlist' element={<Linker/>} />
-          <Route path='/sign-up' element={<SignUp/>} />
+          <Route path='/playlist' element={<Ytplaylist/>} />
         </Routes>
       </Router> 
-      <vid className='videolist' id='vid'> < /vid> 
+      {showButton && (
+      <div className={'scrollToTop'}>
+        <button
+        id='to_top'
+        role="button" 
+        onClick={handleScrollToTop }>To Top
+        </button>
+        </div>
+    )}
         </>
     );
 }
