@@ -6,7 +6,7 @@ import {
     useState,
     useEffect
 } from "react";
-import xtype from 'xtypejs';
+// import xtype from 'xtypejs';
 
 const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50';
 // let playlistId = ''; //'&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk';
