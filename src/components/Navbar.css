@@ -41,7 +41,7 @@
   list-style: none;
   text-align: center;
   width: 60vw;
-  justify-content: end;
+  justify-content: start;
   margin-right: 2rem;
 }
 
@@ -90,6 +90,7 @@
     left: -100%;
     opacity: 1;
     transition: all 0.5s ease;
+    justify-content: flex-start;
   }
 
   .nav-menu.active {

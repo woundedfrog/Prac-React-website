@@ -6,7 +6,7 @@ import {
     useState,
     useEffect
 } from "react";
-// import xtype from 'xtypejs';
+import xtype from 'xtypejs';
 
 const apiUrl = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50';
 // let playlistId = ''; //'&playlistId=PLg-QWgQ907Hoz61oESylThb2MK9vPC6rk';
@@ -23,6 +23,8 @@ function Format() {
     const searchVal = useRef('');
     const [playlistId, setPlaylistId] = useState(inputRef.current.value);
     const [nextPage, setNextPage] = useState('');
+    let showTHumb = true;
+    let showtitle = true;
     // const [prevPage, setPrevPage] = useState('');
 
     const submitHandler = (e) => {
@@ -72,7 +74,7 @@ function Format() {
             <a className='vidlink' href={vid.vidUrl} target='_blank'>
                 <img className='vidimg' src={vid.vidThumbnail} alt='Coffee and Prayer video'></img>
             </a>
-            <p>{vid.vidTitle.replace('Coffee & Prayer Bible Study ', '')}</p>
+            <h3 className='vidname' >{vid.vidTitle.replace('Coffee & Prayer Bible Study ', '')}</h3>
         </div></li>
     );
 
@@ -81,26 +83,50 @@ function Format() {
         if (newUrl === 'DeadEnd') {
             return
         };
-
-        // console.log(searchVal.current.value);
+      
 
         const query = !(searchVal.current.value.length === 0) ? searchVal.current.value : 'empty';
-        // console.log(query);
 
-        let elements = document.getElementsByTagName('li');
+        let elements = '';
+        if (event === 'thumb') {
+            // console.log(event);
+           elements = document.getElementsByClassName('vidimg');
+        } else if (event === 'title') {
+            elements = document.getElementsByClassName('vidname');
+        } else {
+            elements = document.getElementsByTagName('li');
+        }
+
         let eleArray = Array.prototype.slice.call(elements);
+        
+
 
         eleArray.filter((item) => {
-            // console.log(!item.title.includes(query));
-            if (!item.title) return item;
-            if (item.getAttribute('title').toLowerCase().includes(query.toLowerCase()) === false && query !== 'empty') {
+        
+            // console.log(elements);
+                // console.log(!item.title.includes(query));
+            if (event != 'thumb' && event != 'titlehide' && !item.title) return item;
+            if (event == "thumb") {
+               
+               showTHumb ? item.style.display = "none" : item.style.display = "initial";
+            } else if (event == 'titlehide') {
+               
+                // console.log(item);
+                showtitle ? item.style.display = "none" : item.style.display = "initial";
+             } else if ( item.getAttribute('title').toLowerCase().includes(query.toLowerCase()) === false && query !== 'empty') {
+                
+                // console.log('hide video');
                 item.style.display = "none";
             } else {
+                // console.log('show');
                 item.style.display = "initial";
             }
             return item;
 
         });
+        
+        if (event == 'thumb')  showTHumb = !showTHumb;
+        if (event == 'titlehide') showtitle = !showtitle; 
         // console.log(searchVal.current.value);
 
 
@@ -110,7 +136,7 @@ function Format() {
         <>
             <div className="app">
                 <form onSubmit={submitHandler}>
-                    <input ref={inputRef} />
+                    <input ref={inputRef} placeholder='value after "list='/>
                     <button className='btn-primary' type="submit" > Submit </button > </form>
                 <p>Submit Value: <b>{playlistId}</b></p>
                 <br />
@@ -125,6 +151,8 @@ function Format() {
             <br />
             <br />
             <button className='btn-primary btn-secondary' onClick={() => getVideosPage(newUrl)}>Fetch Videos</button>
+            <button className='btn-primary btn-tertiary' onClick={() => handleOnInputChange('thumb')}>Thumbnails (on/off)</button>
+            {/* <button className='btn-primary btn-tertiary' onClick={() => handleOnInputChange('titlehide')}>Titles (on/off)</button> */}
             <p key="totalVids">Number of videos loaded: {vidCount} of {totalVids}</p>
             <ul className='videolist'>{pushIt}</ul>
             </div>

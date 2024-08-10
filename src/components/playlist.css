@@ -32,6 +32,11 @@ margin-top: 5px;
 .btn-secondary {
     background-color: rgb(177, 121, 18);
 }
+
+.btn-tertiary {
+    background-color: rgb(216, 182, 8);
+}
+
   
   .videolist {
     display: flex;
@@ -101,9 +106,16 @@ padding: 10px;
 	word-wrap: break-word;
 }
 
-.vidimg {
+.vidimg_hidden {
     display: none;
+}
 
+.vidimg {
+
+}
+
+.vidimg_shown {
+    
 }
 
 .vidlink {
